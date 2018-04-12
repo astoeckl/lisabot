@@ -185,6 +185,7 @@ function handleEcho(messageId, appId, metadata) {
 function handleApiAiAction(sender, action, responseText, contexts, parameters) {
 	switch (action) {
 		case "zahlinfo":
+			sendTextMessage(sender, "response.text");
 			if (parameters.hasOwnProperty("number") && parameters["number"]!='') {
 				request({
         	url: 'http://numbersapi.com/' + parameters["number"],
