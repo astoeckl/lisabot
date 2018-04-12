@@ -183,10 +183,10 @@ function handleEcho(messageId, appId, metadata) {
 }
 
 function handleApiAiAction(sender, action, responseText, contexts, parameters) {
-	sendTextMessage(sender, "response.text");
+
 	switch (action) {
 		case "zahlinfo":
-
+			sendTextMessage(sender, "response.text");
 			if (parameters.hasOwnProperty("number") && parameters["number"]!='') {
 				request({
         	url: 'http://numbersapi.com/' + parameters["number"],
@@ -674,7 +674,7 @@ function greetUserText(userId) {
 				console.log("FB user: %s %s, %s",
 					user.first_name, user.last_name, user.gender);
 
-				sendTextMessage(userId, "Hallo " + user.first_name + '!' + "Ich bin LISA, Du kannst mit mir lernen.");
+				sendTextMessage(userId, "Hallo " + user.first_name + '! ' + "Ich bin LISA, Du kannst mit mir lernen.");
 			} else {
 				console.log("Cannot get data for fb user with id",
 					userId);
