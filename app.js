@@ -191,7 +191,7 @@ function handleApiAiAction(sender, action, responseText, contexts, parameters) {
         	url: 'http://numbersapi.com/' + parameters["number"],
     			}, function(error, response, body){
         		if(!error && response.statusCode == 200) {
-            	sendTextMessage(sender, response.text);
+            	sendTextMessage(sender, response);
         		} else {
             	sendTextMessage(sender, "Keine Info zu der Zahl verfügbar.");
             	console.error(response.error);
