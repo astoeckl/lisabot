@@ -187,15 +187,16 @@ function handleApiAiAction(sender, action, responseText, contexts, parameters) {
 		case "zahlinfo":
 			if (parameters.hasOwnProperty("number") && parameters["number"]!='') {
 				request({
-        url: 'http://numbersapi.com/' + parameters["number"],
-    }, function(error, response, body){
-        if(!error && response.statusCode == 200) {
-            sendTextMessage(sender, response.text);
-        } else {
-            sendTextMessage(sender, "Keine Info zu der Zahl verfügbar.");
-            console.error(response.error);
-        }
-    	});
+        	url: 'http://numbersapi.com/' + parameters["number"],
+    			}, function(error, response, body){
+        		if(!error && response.statusCode == 200) {
+            	sendTextMessage(sender, response.text);
+        		} else {
+            	sendTextMessage(sender, "Keine Info zu der Zahl verfügbar.");
+            	console.error(response.error);
+        		}
+    		});
+			}
 			break;
 		default:
 			//unhandled action, just send back the text
