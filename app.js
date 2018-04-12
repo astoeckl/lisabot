@@ -186,13 +186,12 @@ function handleApiAiAction(sender, action, responseText, contexts, parameters) {
 
 	switch (action) {
 		case "zahlinfo":
-			sendTextMessage(sender, "response.text");
 			if (parameters.hasOwnProperty("number") && parameters["number"]!='') {
 				request({
         	url: 'http://numbersapi.com/' + parameters["number"],
     			}, function(error, response, body){
         		if(!error && response.statusCode == 200) {
-            	sendTextMessage(sender, "response.text");
+            	sendTextMessage(sender, response.text);
         		} else {
             	sendTextMessage(sender, "Keine Info zu der Zahl verfügbar.");
             	console.error(response.error);
