@@ -8,6 +8,8 @@ const bodyParser = require('body-parser');
 const request = require('request');
 const app = express();
 const uuid = require('uuid');
+const pg = require('pg');
+pg.defaults.ssl = true;
 
 
 // Messenger API parameters
@@ -25,6 +27,9 @@ if (!config.FB_APP_SECRET) {
 }
 if (!config.SERVER_URL) { //used for ink to static files
 	throw new Error('missing SERVER_URL');
+}
+if (!config.PG_CONFIG) { //postgress config
+    throw new Error('missing PG_CONFIG');
 }
 
 
@@ -666,6 +671,44 @@ function greetUserText(userId) {
 
 	}, function (error, response, body) {
 		if (!error && response.statusCode == 200) {
+
+
+			var pool = new pg.Pool(config.PG_CONFIG);
+			pool.connect(function(err, client, done) {
+				if (err) {
+					return console.error('Error acquiring client', err.stack);
+				}
+				var rows = [];
+				console.log('fetching user');
+				client.query(`SELECT id FROM users WHERE fb_id='${userId}' LIMIT 1`,
+					function(err, result) {
+						console.log('query result ' + result);
+						if (err) {
+							console.log('Query error: ' + err);
+						} else {
+							console.log('rows: ' + result.rows.length);
+							if (result.rows.length === 0) {
+								let sql = 'INSERT INTO users (fb_id, first_name, last_name, profile_pic, ' +
+									'locale, timezone, gender) VALUES ($1, $2, $3, $4, $5, $6, $7)';
+								console.log('sql: ' + sql);
+								client.query(sql,
+									[
+										userId,
+										user.first_name,
+										user.last_name,
+										user.profile_pic,
+										user.locale,
+										user.timezone,
+										user.gender
+									]);
+							}
+						}
+					});
+
+			});
+			pool.end();
+
+
 
 			var user = JSON.parse(body);
 
